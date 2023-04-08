@@ -26,6 +26,12 @@ class Comment
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Book $book = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Quotes $quotes = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +81,30 @@ class Comment
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getBook(): ?Book
+    {
+        return $this->book;
+    }
+
+    public function setBook(?Book $book): self
+    {
+        $this->book = $book;
+
+        return $this;
+    }
+
+    public function getQuotes(): ?Quotes
+    {
+        return $this->quotes;
+    }
+
+    public function setQuotes(?Quotes $quotes): self
+    {
+        $this->quotes = $quotes;
 
         return $this;
     }

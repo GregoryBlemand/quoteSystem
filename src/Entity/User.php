@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,6 +34,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Author::class)]
+    private Collection $authors;
+
+    public function __construct()
+    {
+        $this->authors = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,6 +133,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Author>
+     */
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function addAuthor(Author $author): self
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+            $author->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): self
+    {
+        if ($this->authors->removeElement($author)) {
+            // set the owning side to null (unless already changed)
+            if ($author->getUser() === $this) {
+                $author->setUser(null);
+            }
+        }
 
         return $this;
     }

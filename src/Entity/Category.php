@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,22 @@ class Category
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\ManyToMany(targetEntity: Author::class, mappedBy: 'categories')]
+    private Collection $authors;
+
+    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'categories')]
+    private Collection $books;
+
+    #[ORM\ManyToMany(targetEntity: Quotes::class, mappedBy: 'categories')]
+    private Collection $quotes;
+
+    public function __construct()
+    {
+        $this->authors = new ArrayCollection();
+        $this->books = new ArrayCollection();
+        $this->quotes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +78,87 @@ class Category
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Author>
+     */
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function addAuthor(Author $author): self
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+            $author->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthor(Author $author): self
+    {
+        if ($this->authors->removeElement($author)) {
+            $author->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Book>
+     */
+    public function getBooks(): Collection
+    {
+        return $this->books;
+    }
+
+    public function addBook(Book $book): self
+    {
+        if (!$this->books->contains($book)) {
+            $this->books->add($book);
+            $book->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBook(Book $book): self
+    {
+        if ($this->books->removeElement($book)) {
+            $book->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quotes>
+     */
+    public function getQuotes(): Collection
+    {
+        return $this->quotes;
+    }
+
+    public function addQuote(Quotes $quote): self
+    {
+        if (!$this->quotes->contains($quote)) {
+            $this->quotes->add($quote);
+            $quote->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuote(Quotes $quote): self
+    {
+        if ($this->quotes->removeElement($quote)) {
+            $quote->removeCategory($this);
+        }
 
         return $this;
     }

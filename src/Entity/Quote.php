@@ -19,6 +19,13 @@ class Quote
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $file = null;
 
+    #[ORM\ManyToOne(inversedBy: 'quotes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Author $author = null;
+
+    #[ORM\ManyToOne(inversedBy: 'quotes')]
+    private ?Book $book = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +51,30 @@ class Quote
     public function setFile(?string $file): self
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?Author
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?Author $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getBook(): ?Book
+    {
+        return $this->book;
+    }
+
+    public function setBook(?Book $book): self
+    {
+        $this->book = $book;
 
         return $this;
     }
