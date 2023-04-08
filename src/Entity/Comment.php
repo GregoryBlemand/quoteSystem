@@ -30,7 +30,8 @@ class Comment
     private ?Book $book = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    private ?Quotes $quotes = null;
+    private ?Quote $quote = null;
+
 
     public function getId(): ?int
     {
@@ -97,15 +98,16 @@ class Comment
         return $this;
     }
 
-    public function getQuotes(): ?Quotes
+    public function getQuote(): ?Quote
     {
-        return $this->quotes;
+        return $this->quote;
     }
 
-    public function setQuotes(?Quotes $quotes): self
+    public function setQuote(?Quote $quote): self
     {
-        $this->quotes = $quotes;
+        $this->quote = $quote;
 
         return $this;
     }
+
 }

@@ -31,7 +31,7 @@ class Category
     #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'categories')]
     private Collection $books;
 
-    #[ORM\ManyToMany(targetEntity: Quotes::class, mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: Quote::class, mappedBy: 'categories')]
     private Collection $quotes;
 
     public function __construct()
@@ -137,14 +137,14 @@ class Category
     }
 
     /**
-     * @return Collection<int, Quotes>
+     * @return Collection<int, Quote>
      */
     public function getQuotes(): Collection
     {
         return $this->quotes;
     }
 
-    public function addQuote(Quotes $quote): self
+    public function addQuote(Quote $quote): self
     {
         if (!$this->quotes->contains($quote)) {
             $this->quotes->add($quote);
@@ -154,7 +154,7 @@ class Category
         return $this;
     }
 
-    public function removeQuote(Quotes $quote): self
+    public function removeQuote(Quote $quote): self
     {
         if ($this->quotes->removeElement($quote)) {
             $quote->removeCategory($this);
@@ -162,4 +162,5 @@ class Category
 
         return $this;
     }
+
 }
