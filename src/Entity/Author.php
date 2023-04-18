@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constrainst as Assert;
+
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 class Author
 {
@@ -17,6 +19,7 @@ class Author
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 2, max: 70)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
